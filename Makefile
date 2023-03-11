@@ -11,11 +11,11 @@ ASMFLAGS =	-felf64
 TEST_NAME = test_bin
 CC =		gcc
 TEST_DIR = test
-TEST_SRC = main.c
+TEST_SRC = main.c strlen.c strcpy.c strcmp.c write.c read.c strdup.c utils.c
 TEST_OBJ = $(TEST_SRC:%.c=%.o)
 TEST_OBJECTS = $(addprefix $(TEST_OBJ_DIR)/, $(TEST_OBJ))
 TEST_OBJ_DIR = $(TEST_DIR)/obj
-CFLAGS =	-Werror -Wall -Wextra
+CFLAGS =	-Werror -Wall -Wextra -g -fno-builtin-strcmp
 INC =		-I.
 LDFLAGS =	-L. -lasm
 
@@ -38,9 +38,11 @@ fclean : clean
 
 re : fclean all
 
-test : $(addprefix $(TEST_OBJ_DIR)/, $(TEST_OBJ))
+test : $(TEST_NAME)
+
+$(TEST_NAME) : $(addprefix $(TEST_OBJ_DIR)/, $(TEST_OBJ))
 	$(CC) $(CFLAGS) $(INC) $(TEST_OBJECTS) -o $(TEST_NAME) $(LDFLAGS)
 
 $(TEST_OBJ_DIR)/%.o : $(TEST_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC) -c $(TEST_DIR)/$(TEST_SRC) -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@

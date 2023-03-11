@@ -26,5 +26,5 @@ ft_strcpy:
     ret               ; return the destination string pointer
 
 null_return:
-    mov rax, 0
-    ret
+    mov rax, 0        ; set return value to 0
+    ret               ; return
